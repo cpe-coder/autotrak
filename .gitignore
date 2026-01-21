@@ -2,6 +2,7 @@
 
 # dependencies
 node_modules/
+package-lock.json
 
 # Expo
 .expo/
@@ -25,6 +26,7 @@ expo-env.d.ts
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+package-lock.json
 
 # macOS
 .DS_Store
@@ -37,6 +39,7 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+package-lock.json
 
 # generated native folders
 /ios

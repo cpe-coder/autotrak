@@ -1,19 +1,16 @@
-import { ImageViewer } from "@/components";
-import database from "@/utils/firebase.config";
+import { icons } from "@/constant/icon";
+import { database } from "@/utils/firebase.config";
 import { useNavigation } from "@react-navigation/native";
-import { useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { onValue, ref } from "firebase/database";
+import { onValue, ref, set } from "firebase/database";
 import React from "react";
-import { Animated, Modal, Text, View } from "react-native";
+import { Image, Modal, Text, TouchableOpacity, View } from "react-native";
+import { WebView } from "react-native-webview";
 
 export default function Control() {
 	const navigation = useNavigation();
 	const [isVisible, setIsVisible] = React.useState(false);
-	const router = useRouter();
-	const rotation = React.useRef(new Animated.Value(90)).current;
-	const [ripeCount, setRipeCount] = React.useState(0);
-	const [disable, setDisable] = React.useState(false);
+	const [isConnected, setIsConnected] = React.useState(false);
 
 	React.useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
@@ -30,25 +27,111 @@ export default function Control() {
 		return unsubscribe;
 	}, [navigation]);
 
-	const getRipeCount = async () => {
-		const valueRef = ref(database, "detection/ripe");
+	React.useEffect(() => {
+		getConnectedStatus();
+	}, []);
+
+	const setForwardIn = async () => {
+		const valueRef = ref(database, "forward");
+		console.log("Pressed In");
+		await set(valueRef, true);
+	};
+
+	const setForwardOut = async () => {
+		const valueRef = ref(database, "forward");
+		console.log("Pressed out");
+		await set(valueRef, false);
+	};
+
+	const setLeftIn = async () => {
+		const valueRef = ref(database, "left");
+		console.log("Pressed In");
+		await set(valueRef, true);
+	};
+
+	const setLeftOut = async () => {
+		const valueRef = ref(database, "left");
+		console.log("Pressed In");
+		await set(valueRef, false);
+	};
+
+	const setRightIn = async () => {
+		const valueRef = ref(database, "right");
+		console.log("Pressed In");
+		await set(valueRef, true);
+	};
+
+	const setRightOut = async () => {
+		const valueRef = ref(database, "right");
+		console.log("Pressed In");
+		await set(valueRef, false);
+	};
+
+	const getConnectedStatus = async () => {
+		const valueRef = ref(database, "isConnected");
 
 		const subscribe = await onValue(valueRef, (snapshot) => {
 			const value = snapshot.val();
-			setRipeCount(value);
+			setIsConnected(value);
 		});
 		return () => subscribe();
 	};
 
 	return (
 		<>
-			<View className="bg-background h-screen w-screen"></View>
+			<View className=" h-screen w-screen"></View>
 			<Modal visible={isVisible} animationType="fade">
-				<View className="h-screen w-screen bg-slate-700">
-					<ImageViewer />
+				<View className="flex-row justify-between items-end py-10 px-20 absolute z-10 w-full top-0">
+					<Text
+						className={` font-bold ${isConnected ? "text-green-500" : "text-red-500"}`}
+					>
+						{isConnected ? "🟢 Connected" : "🔴 Not connected"}
+					</Text>
 				</View>
-				<View className="flex-row justify-between items-end p-6 absolute z-10 w-full bottom-0">
-					<Text className="text-white text-lg">Controls</Text>
+				<View className="h-screen w-screen border">
+					<WebView
+						className="w-screen h-screen"
+						source={{ uri: "http://192.168.43.55:81/stream" }}
+					/>
+				</View>
+				<View className="flex-row justify-between items-end py-10 px-20 absolute z-10 w-full bottom-0">
+					<View className="flex-row items-center justify-center gap-4">
+						<TouchableOpacity onPressIn={setLeftIn} onPressOut={setLeftOut}>
+							<View className="p-4 bg-[#1a5f3a] rounded-full">
+								<Image
+									source={icons.Left}
+									alt="Left"
+									className="w-10 h-10"
+									tintColor={"#fff"}
+								/>
+							</View>
+						</TouchableOpacity>
+						<TouchableOpacity onPressIn={setRightIn} onPressOut={setRightOut}>
+							<View className="p-4 bg-[#1a5f3a] rounded-full">
+								<Image
+									source={icons.Right}
+									alt="Right"
+									className="w-10 h-10"
+									tintColor={"#fff"}
+								/>
+							</View>
+						</TouchableOpacity>
+					</View>
+					<View>
+						<TouchableOpacity
+							onPressIn={setForwardIn}
+							onPressOut={setForwardOut}
+						>
+							<View className="p-4 bg-[#1a5f3a] rounded-full">
+								<Image
+									source={icons.Up}
+									alt="Up"
+									className="w-14 h-14"
+									tintColor={"#fff"}
+								/>
+							</View>
+						</TouchableOpacity>
+					</View>
 				</View>
 			</Modal>
 		</>

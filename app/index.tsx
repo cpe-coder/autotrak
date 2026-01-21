@@ -10,7 +10,7 @@ export default function Welcome() {
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
-			router.replace("/control");
+			router.replace("/Control");
 		}, 2000);
 
 		return () => clearTimeout(timer);

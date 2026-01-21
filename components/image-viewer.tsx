@@ -12,12 +12,10 @@ const ImageViewer = () => {
 		return () => clearInterval(interval);
 	}, []);
 
-	const uri = `http://192.168.43.191/cam-hi.jpg?${tick}`;
-	const key = tick % 2;
+	const uri = "http://192.168.43.55:81/stream";
 
 	return (
 		<Image
-			key={key}
 			source={{ uri }}
 			style={{ width: "100%", height: "100%" }}
 			resizeMode="cover"
