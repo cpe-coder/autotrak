@@ -47,7 +47,7 @@ export default function SignIn() {
 					setSuccessMessage(res.data.message);
 					setIsSubmit(false);
 					setTimeout(() => {
-						router.push("/Home");
+						router.push("/Control");
 					}, 1500);
 				}
 			} catch (error: any) {
