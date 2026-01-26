@@ -89,11 +89,11 @@ export default function SignIn() {
 				>
 					<View className="items-center -mt-20 justify-center">
 						<Text className="text-5xl text-primary font-bold text-center">
-							RIPE SENSEI
+							AutoTrak
 						</Text>
 
-						<Text className="text-2xl text-center text-text mt-10 font-bold">
-							SIGN IN
+						<Text className="text-lg text-center text-gray-500 mt-4 font-medium">
+							Sign in to your account
 						</Text>
 					</View>
 
@@ -103,6 +103,7 @@ export default function SignIn() {
 						value={form.email}
 						handleChangeText={(e: any) => setForm({ ...form, email: e })}
 						otherStyles="mt-7"
+						borderStyle="border"
 					/>
 
 					<InputField
@@ -113,7 +114,7 @@ export default function SignIn() {
 						otherStyles="mt-7"
 					/>
 					<Text
-						className={`text-lg text-secondary font-semibold text-center py-1 px-4 ${
+						className={`text-lg text-red-500 font-semibold text-center py-1 px-4 ${
 							errorMessage ? "block" : "hidden"
 						}`}
 					>
@@ -138,12 +139,12 @@ export default function SignIn() {
 					/>
 
 					<View className="flex justify-center pt-5 flex-row gap-2">
-						<Text className="text-lg text-secondText font-pregular">
-							Dont have an account?
+						<Text className="text-md text-gray-500 font-regular">
+							Don&apos;t have an account?
 						</Text>
 						<TouchableOpacity onPress={handleRoute}>
-							<Text className="text-lg font-psemibold text-primary">
-								Sign-Up
+							<Text className="text-md font-semibold text-primary">
+								Sign Up
 							</Text>
 						</TouchableOpacity>
 					</View>

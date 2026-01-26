@@ -99,11 +99,11 @@ export default function SignUp() {
 				>
 					<View className="items-center -mt-20 justify-center">
 						<Text className="text-5xl text-primary font-bold text-center">
-							RIPE SENSEI
+							AutoTrak
 						</Text>
 
-						<Text className="text-2xl text-center text-text mt-10 font-bold">
-							SIGN UP
+						<Text className="text-lg text-center text-gray-500 mt-4 font-bold">
+							Create an account
 						</Text>
 					</View>
 					<InputField
@@ -154,11 +154,11 @@ export default function SignUp() {
 					/>
 
 					<View className="flex justify-center pt-5 flex-row gap-2">
-						<Text className="text-lg text-secondText font-pregular">
+						<Text className="text-md text-gray-500 font-regular">
 							Have an account?
 						</Text>
 						<TouchableOpacity onPress={handleRoute}>
-							<Text className="text-lg font-psemibold text-primary">
+							<Text className="text-md font-semibold text-primary">
 								Sign In
 							</Text>
 						</TouchableOpacity>
