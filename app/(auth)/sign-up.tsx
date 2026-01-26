@@ -130,7 +130,7 @@ export default function SignUp() {
 					/>
 
 					<Text
-						className={`text-lg text-secondary font-semibold text-center py-1 px-4 ${
+						className={`text-lg text-red-500 font-semibold text-center py-1 px-4 ${
 							errorMessage ? "block" : "hidden"
 						}`}
 					>

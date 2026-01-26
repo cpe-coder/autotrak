@@ -31,7 +31,7 @@ const CustomButton: React.FC<CustomButtonProp> = ({
 			}`}
 			disabled={disable}
 		>
-			<Text className={`text-text font-psemibold text-lg ${textStyles}`}>
+			<Text className={`text-white font-semibold text-lg ${textStyles}`}>
 				{title}
 			</Text>
 
