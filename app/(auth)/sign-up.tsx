@@ -59,29 +59,28 @@ export default function SignUp() {
 		setErrorMessage("");
 
 		if (onRegister) {
-			await onRegister!(form.name, form.email, form.password)
-				.then((res) => {
-					if (res.status === 201) {
-						setErrorMessage("");
-						setForm({
-							name: "",
-							email: "",
-							password: "",
-						});
-						setSuccessMessage(res.data.message);
-						setIsSubmit(false);
-						setTimeout(() => {
-							router.push("/sign-in");
-						}, 1500);
-					}
-				})
-				.catch((error) => {
-					setErrorMessage(error.response.data.message);
+			try {
+				console.log("registering");
+				const res = await onRegister!(form.name, form.email, form.password);
+				if (res.status === 201) {
+					setErrorMessage("");
+					setForm({
+						name: "",
+						email: "",
+						password: "",
+					});
+					setSuccessMessage(res.data.message);
 					setIsSubmit(false);
-				});
+					setTimeout(() => {
+						router.push("/sign-in");
+					}, 1500);
+				}
+			} catch (error: any) {
+				setErrorMessage(error.response.data.message);
+				setIsSubmit(false);
+			}
 		} else {
-			setErrorMessage("Registration function is not available.");
-			setIsSubmit(false);
+			console.log("no register function");
 		}
 	};
 
