@@ -35,7 +35,7 @@ export default function SignIn() {
 		const unsubscribe = navigation.addListener("focus", () => {
 			try {
 				ScreenOrientation.lockAsync(
-					ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT,
+					ScreenOrientation.OrientationLock.PORTRAIT_UP,
 				);
 			} catch (error) {
 				console.log(error);

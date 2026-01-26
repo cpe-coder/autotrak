@@ -1,6 +1,8 @@
 import { CustomButton, InputField } from "@/components";
 import { useAuth } from "@/context/auth-context";
+import { useNavigation } from "@react-navigation/native";
 import { useRouter } from "expo-router";
+import * as ScreenOrientation from "expo-screen-orientation";
 import React from "react";
 import {
 	Dimensions,
@@ -24,6 +26,21 @@ export default function SignUp() {
 	const router = useRouter();
 
 	const { onRegister } = useAuth();
+	const navigation = useNavigation();
+
+	React.useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", () => {
+			try {
+				ScreenOrientation.lockAsync(
+					ScreenOrientation.OrientationLock.PORTRAIT_UP,
+				);
+			} catch (error) {
+				console.log(error);
+			}
+		});
+
+		return unsubscribe;
+	}, [navigation]);
 
 	React.useEffect(() => {
 		checkingForm();
