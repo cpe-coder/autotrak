@@ -12,7 +12,7 @@ interface AuthProps {
 }
 
 const TOKEN_KEY = "TOKEN";
-export const API_URL = "https://ripe-sensei-server-9z7p.vercel.app";
+export const API_URL = "https://autotrak-server.vercel.app";
 // export const API_URL = "http://localhost:3000";
 const AuthContext = createContext<AuthProps>({});
 
@@ -50,9 +50,8 @@ export const AuthProvider = ({ children }: any) => {
 		const verifyToken = async () => {
 			const token = await SecureStore.getItemAsync(TOKEN_KEY);
 
-			const authorization = (axios.defaults.headers.common[
-				"Authorization"
-			] = `Bearer ${token}`);
+			const authorization = (axios.defaults.headers.common["Authorization"] =
+				`Bearer ${token}`);
 
 			try {
 				await axios
@@ -99,9 +98,8 @@ export const AuthProvider = ({ children }: any) => {
 			token: result.data.token,
 			authenticated: true,
 		});
-		axios.defaults.headers.common[
-			"Authorization"
-		] = `Bearer ${result.data.token}`;
+		axios.defaults.headers.common["Authorization"] =
+			`Bearer ${result.data.token}`;
 
 		await SecureStore.setItemAsync(TOKEN_KEY, result.data.token);
 

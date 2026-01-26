@@ -1,5 +1,6 @@
 import { CustomButton, InputField } from "@/components";
 import { useRouter } from "expo-router";
+import * as ScreenOrientation from "expo-screen-orientation";
 import {
 	Dimensions,
 	ScrollView,
@@ -10,6 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useAuth } from "@/context/auth-context";
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 
 export default function SignIn() {
@@ -23,10 +25,25 @@ export default function SignIn() {
 		email: "",
 		password: "",
 	});
+	const navigation = useNavigation();
 
 	React.useEffect(() => {
 		checkingForm();
 	});
+
+	React.useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", () => {
+			try {
+				ScreenOrientation.lockAsync(
+					ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT,
+				);
+			} catch (error) {
+				console.log(error);
+			}
+		});
+
+		return unsubscribe;
+	}, [navigation]);
 
 	const checkingForm = async () => {
 		if (form.email === "" || form.password === "") {

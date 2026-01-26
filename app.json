@@ -39,7 +39,8 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,
@@ -48,7 +49,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "ec64473e-a625-4d95-ac6c-83fbc3d8686f"
+        "projectId": "d62a77e6-bd6d-40ea-8ae7-8357bae9d429"
       }
     },
     "owner": "cpecoder"
