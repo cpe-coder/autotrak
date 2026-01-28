@@ -1,5 +1,6 @@
 import { Settings } from "@/components";
 import { icons } from "@/constant/icon";
+import { useAuth } from "@/context/auth-context";
 import { database } from "@/utils/firebase.config";
 import { useNavigation } from "@react-navigation/native";
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -8,10 +9,24 @@ import React from "react";
 import { Image, Modal, Text, TouchableOpacity, View } from "react-native";
 import { WebView } from "react-native-webview";
 
+function UserInfo(props: { userData: { name: any; email: any } }) {
+	return (
+		<View className="flex-col items-start justify-center bg-background/70 rounded-lg px-2 mx-6 py-1">
+			<Text className="text-left text-text font-bold">
+				{props.userData && props.userData.name}
+			</Text>
+			<Text className="text-left text-secondText font-semibold">
+				{props.userData && props.userData.email}
+			</Text>
+		</View>
+	);
+}
+
 export default function Control() {
 	const navigation = useNavigation();
 	const [isVisible, setIsVisible] = React.useState(false);
 	const [isConnected, setIsConnected] = React.useState(false);
+	const { userData, userImage } = useAuth();
 
 	React.useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
