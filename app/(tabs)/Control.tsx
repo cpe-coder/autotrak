@@ -1,26 +1,13 @@
-import { Settings } from "@/components";
 import { icons } from "@/constant/icon";
 import { useAuth } from "@/context/auth-context";
 import { database } from "@/utils/firebase.config";
 import { useNavigation } from "@react-navigation/native";
+import { router } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { onValue, ref, set } from "firebase/database";
 import React from "react";
 import { Image, Modal, Text, TouchableOpacity, View } from "react-native";
 import { WebView } from "react-native-webview";
-
-function UserInfo(props: { userData: { name: any; email: any } }) {
-	return (
-		<View className="flex-col items-start justify-center bg-background/70 rounded-lg px-2 mx-6 py-1">
-			<Text className="text-left text-text font-bold">
-				{props.userData && props.userData.name}
-			</Text>
-			<Text className="text-left text-secondText font-semibold">
-				{props.userData && props.userData.email}
-			</Text>
-		</View>
-	);
-}
 
 export default function Control() {
 	const navigation = useNavigation();
@@ -103,7 +90,25 @@ export default function Control() {
 					>
 						{isConnected ? "🟢 Connected" : "🔴 Not connected"}
 					</Text>
-					<Settings />
+
+					<TouchableOpacity onPress={() => router.push("/Settings")}>
+						<View className="flex justify-center items-center bg-gray-200 p-1 rounded-lg flex-row gap-2">
+							<View>
+								<Image
+									source={!userImage ? icons.User : { uri: userImage.image! }}
+									className="w-10 h-10 border border-primary rounded-full"
+								/>
+							</View>
+							<View>
+								<Text className="text-left text-text font-bold">
+									{!userData ? "AutoTrak User" : userData?.name}
+								</Text>
+								<Text className="text-left text-secondText font-semibold">
+									{!userData ? "AutoTrak Email" : userData?.email}
+								</Text>
+							</View>
+						</View>
+					</TouchableOpacity>
 				</View>
 				<View className="h-screen w-screen border">
 					<WebView

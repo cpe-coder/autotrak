@@ -24,15 +24,22 @@ export default function TabLayout() {
 			<Tabs
 				screenOptions={{
 					headerShadowVisible: false,
-					tabBarActiveTintColor: "#00ffb2",
-					tabBarInactiveTintColor: "white",
-					tabBarStyle: {
-						backgroundColor: "#0a0f1c",
-						borderTopWidth: 0,
-					},
+					tabBarShowLabel: false,
+					tabBarStyle: { height: 0 },
 				}}
 			>
-				<Tabs.Screen name="Control" options={{ headerShown: false }} />
+				<Tabs.Screen
+					name="Control"
+					options={{ headerShown: false, tabBarIconStyle: { display: "none" } }}
+				/>
+				<Tabs.Screen
+					name="Settings"
+					options={{
+						headerShown: false,
+						tabBarShowLabel: false,
+						tabBarIconStyle: { display: "none" },
+					}}
+				/>
 			</Tabs>
 		</>
 	);
