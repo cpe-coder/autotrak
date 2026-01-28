@@ -1,3 +1,4 @@
+import { Settings } from "@/components";
 import { icons } from "@/constant/icon";
 import { database } from "@/utils/firebase.config";
 import { useNavigation } from "@react-navigation/native";
@@ -87,6 +88,7 @@ export default function Control() {
 					>
 						{isConnected ? "🟢 Connected" : "🔴 Not connected"}
 					</Text>
+					<Settings />
 				</View>
 				<View className="h-screen w-screen border">
 					<WebView
