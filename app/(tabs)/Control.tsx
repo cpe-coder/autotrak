@@ -21,7 +21,6 @@ import { WebView } from "react-native-webview";
 const SLIDER_HEIGHT = 100;
 const MIN_VALUE = 0;
 const MAX_VALUE = 180;
-const MID_VALUE = 90;
 
 function Trootle(props: {
 	power:
@@ -78,9 +77,10 @@ export default function Control() {
 	const [isVisible, setIsVisible] = React.useState(false);
 	const [isConnected, setIsConnected] = React.useState(false);
 	const { userData, userImage } = useAuth();
-	const [power, setPower] = React.useState(MID_VALUE);
-	const [position, setPosition] = React.useState(SLIDER_HEIGHT / 2);
-	const [suyodValue, setSuyodValue] = React.useState(false);
+	const [power, setPower] = React.useState(MIN_VALUE);
+	const [position, setPosition] = React.useState(SLIDER_HEIGHT / 100);
+	const [suyodValueUp, setSuyodValueUp] = React.useState(false);
+	const [suyodValueDown, setSuyodValueDown] = React.useState(false);
 
 	React.useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
@@ -130,10 +130,15 @@ export default function Control() {
 		const valueRef = ref(database, "right");
 		await set(valueRef, false);
 	};
-	const setSuyod = async () => {
-		const valueRef = ref(database, "suyod");
-		setSuyodValue((prev) => !prev);
-		await set(valueRef, suyodValue);
+	const setSuyodDown = async () => {
+		const valueRef = ref(database, "suyodDown");
+		setSuyodValueDown((prev) => !prev);
+		await set(valueRef, !suyodValueDown);
+	};
+	const setSuyodUp = async () => {
+		const valueRef = ref(database, "suyodUp");
+		setSuyodValueUp((prev) => !prev);
+		await set(valueRef, !suyodValueUp);
 	};
 
 	const getConnectedStatus = async () => {
@@ -222,13 +227,26 @@ export default function Control() {
 							</View>
 						</TouchableOpacity>
 					</View>
-					<View>
+					<View className="flex-row items-center justify-center gap-4">
 						<Pressable
-							onPress={setSuyod}
-							className="bg-green-500 p-4 rounded-full"
+							disabled={suyodValueUp}
+							onPress={setSuyodDown}
+							className={` p-4 rounded-full ${suyodValueDown ? "bg-green-500" : "bg-red-500"} ${suyodValueUp ? "opacity-50" : ""}`}
 						>
 							<Image
 								source={icons.Down}
+								resizeMode="contain"
+								tintColor={"#fff"}
+								className="w-8 h-8"
+							/>
+						</Pressable>
+						<Pressable
+							disabled={suyodValueDown}
+							onPress={setSuyodUp}
+							className={` p-4 rounded-full ${suyodValueUp ? "bg-green-500" : "bg-red-500"} ${suyodValueDown ? "opacity-50" : ""}`}
+						>
+							<Image
+								source={icons.Up}
 								resizeMode="contain"
 								tintColor={"#fff"}
 								className="w-8 h-8"
