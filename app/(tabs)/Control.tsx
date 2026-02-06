@@ -6,14 +6,81 @@ import { router } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { onValue, ref, set } from "firebase/database";
 import React from "react";
-import { Image, Modal, Text, TouchableOpacity, View } from "react-native";
+import {
+	Image,
+	Modal,
+	PanResponder,
+	Pressable,
+	Text,
+	TouchableOpacity,
+	View,
+	ViewProps,
+} from "react-native";
 import { WebView } from "react-native-webview";
+
+const SLIDER_HEIGHT = 100;
+const MIN_VALUE = 0;
+const MAX_VALUE = 180;
+const MID_VALUE = 90;
+
+function Trootle(props: {
+	power:
+		| string
+		| number
+		| bigint
+		| boolean
+		| React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
+		| Iterable<React.ReactNode>
+		| React.ReactPortal
+		| Promise<
+				| string
+				| number
+				| bigint
+				| boolean
+				| React.ReactPortal
+				| React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
+				| Iterable<React.ReactNode>
+				| null
+				| undefined
+		  >
+		| null
+		| undefined;
+	panHandlers: React.JSX.IntrinsicAttributes &
+		React.JSX.IntrinsicClassAttributes<View> &
+		Readonly<ViewProps>;
+	position: number;
+}) {
+	return (
+		<View className="bg-background/70 items-center justify-center py-2 px-0 rounded-lg mx-6">
+			<Text className="text-lg text-primary font-semibold mb-2">
+				{props.power}
+			</Text>
+
+			<View className="relative items-center justify-center h-[150px] w-16 bg-primary rounded-lg overflow-hidden">
+				<View
+					className="absolute w-6 rounded-md h-[100px] my-4"
+					{...props.panHandlers}
+				>
+					<View
+						className="absolute w-12 h-8 bg-secondary rounded-md -left-3"
+						style={{
+							bottom: props.position - 10,
+						}}
+					/>
+				</View>
+			</View>
+		</View>
+	);
+}
 
 export default function Control() {
 	const navigation = useNavigation();
 	const [isVisible, setIsVisible] = React.useState(false);
 	const [isConnected, setIsConnected] = React.useState(false);
 	const { userData, userImage } = useAuth();
+	const [power, setPower] = React.useState(MID_VALUE);
+	const [position, setPosition] = React.useState(SLIDER_HEIGHT / 2);
+	const [suyodValue, setSuyodValue] = React.useState(false);
 
 	React.useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
@@ -31,43 +98,42 @@ export default function Control() {
 	}, [navigation]);
 
 	React.useEffect(() => {
+		setActivePower();
 		getConnectedStatus();
-	}, []);
+	});
 
-	const setForwardIn = async () => {
-		const valueRef = ref(database, "forward");
-		console.log("Pressed In");
-		await set(valueRef, true);
-	};
-
-	const setForwardOut = async () => {
-		const valueRef = ref(database, "forward");
-		console.log("Pressed out");
-		await set(valueRef, false);
+	const setActivePower = async () => {
+		try {
+			const valueRef = ref(database, "forward");
+			await set(valueRef, power);
+		} catch (error) {
+			console.log("Error setting power value:", error);
+		}
 	};
 
 	const setLeftIn = async () => {
 		const valueRef = ref(database, "left");
-		console.log("Pressed In");
 		await set(valueRef, true);
 	};
 
 	const setLeftOut = async () => {
 		const valueRef = ref(database, "left");
-		console.log("Pressed In");
 		await set(valueRef, false);
 	};
 
 	const setRightIn = async () => {
 		const valueRef = ref(database, "right");
-		console.log("Pressed In");
 		await set(valueRef, true);
 	};
 
 	const setRightOut = async () => {
 		const valueRef = ref(database, "right");
-		console.log("Pressed In");
 		await set(valueRef, false);
+	};
+	const setSuyod = async () => {
+		const valueRef = ref(database, "suyod");
+		setSuyodValue((prev) => !prev);
+		await set(valueRef, suyodValue);
 	};
 
 	const getConnectedStatus = async () => {
@@ -79,6 +145,23 @@ export default function Control() {
 		});
 		return () => subscribe();
 	};
+
+	const panResponder = PanResponder.create({
+		onStartShouldSetPanResponder: () => true,
+		onMoveShouldSetPanResponder: () => true,
+		onPanResponderMove: (_, gestureState) => {
+			let newY = position + gestureState.dy * -1;
+			newY = Math.max(0, Math.min(SLIDER_HEIGHT, newY));
+			setPosition(newY);
+
+			const newValue = Math.round(
+				MIN_VALUE + (newY / SLIDER_HEIGHT) * (MAX_VALUE - MIN_VALUE),
+			);
+			setPower(newValue);
+		},
+		onPanResponderGrant: () => {},
+		onPanResponderRelease: () => {},
+	});
 
 	return (
 		<>
@@ -140,20 +223,23 @@ export default function Control() {
 						</TouchableOpacity>
 					</View>
 					<View>
-						<TouchableOpacity
-							onPressIn={setForwardIn}
-							onPressOut={setForwardOut}
+						<Pressable
+							onPress={setSuyod}
+							className="bg-green-500 p-4 rounded-full"
 						>
-							<View className="p-4 bg-[#1a5f3a] rounded-full">
-								<Image
-									source={icons.Up}
-									alt="Up"
-									className="w-14 h-14"
-									tintColor={"#fff"}
-								/>
-							</View>
-						</TouchableOpacity>
+							<Image
+								source={icons.Down}
+								resizeMode="contain"
+								tintColor={"#fff"}
+								className="w-8 h-8"
+							/>
+						</Pressable>
 					</View>
+					<Trootle
+						power={power}
+						position={position}
+						panHandlers={panResponder.panHandlers}
+					></Trootle>
 				</View>
 			</Modal>
 		</>
