@@ -25,7 +25,7 @@ export default function Welcome() {
 					resizeMode="contain"
 				/>
 			</View>
-			<Text className="font-bold text-xl text-[#fff] mt-10">AutoTrak</Text>
+			<Text className="font-bold text-xl text-[#fff] mt-10">AgriTrak</Text>
 		</View>
 	);
 }

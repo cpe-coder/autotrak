@@ -99,7 +99,7 @@ export default function SignUp() {
 				>
 					<View className="items-center -mt-20 justify-center">
 						<Text className="text-5xl text-primary font-bold text-center">
-							AutoTrak
+							AgriTrak
 						</Text>
 
 						<Text className="text-lg text-center text-gray-500 mt-4 font-bold">
@@ -107,7 +107,7 @@ export default function SignUp() {
 						</Text>
 					</View>
 					<InputField
-						placeholder=""
+						placeholder="Enter your name"
 						title="Name"
 						value={form.name}
 						handleChangeText={(e) => setForm({ ...form, name: e })}
@@ -115,14 +115,14 @@ export default function SignUp() {
 					/>
 
 					<InputField
-						placeholder=""
+						placeholder="Enter your email"
 						title="Email"
 						value={form.email}
 						handleChangeText={(e: any) => setForm({ ...form, email: e })}
 						otherStyles="mt-7"
 					/>
 					<InputField
-						placeholder=""
+						placeholder="Enter your password"
 						title="Password"
 						value={form.password}
 						handleChangeText={(e) => setForm({ ...form, password: e })}

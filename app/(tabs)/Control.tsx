@@ -1,7 +1,6 @@
 import { icons } from "@/constant/icon";
 import { useAuth } from "@/context/auth-context";
 import { database } from "@/utils/firebase.config";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import { useNavigation } from "@react-navigation/native";
 import { router } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -82,7 +81,6 @@ export default function Control() {
 	const [position, setPosition] = React.useState(SLIDER_HEIGHT / 100);
 	const [suyodValueUp, setSuyodValueUp] = React.useState(false);
 	const [suyodValueDown, setSuyodValueDown] = React.useState(false);
-	const [isPowerOn, setIsPowerOn] = React.useState(false);
 
 	React.useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
@@ -141,12 +139,6 @@ export default function Control() {
 		const valueRef = ref(database, "suyodUp");
 		setSuyodValueUp((prev) => !prev);
 		await set(valueRef, !suyodValueUp);
-	};
-
-	const setPowerOn = async () => {
-		const valueRef = ref(database, "power");
-		setIsPowerOn((prev) => !prev);
-		await set(valueRef, !isPowerOn);
 	};
 
 	const getConnectedStatus = async () => {
@@ -213,64 +205,53 @@ export default function Control() {
 					/>
 				</View>
 				<View className="flex-row justify-between items-end py-10 px-20 absolute z-10 w-full bottom-0">
-					<View className="gap-6">
-						<View className="flex-row items-center justify-center gap-4">
-							<Pressable
-								disabled={suyodValueUp}
-								onPress={setSuyodDown}
-								className={` p-4 rounded-full ${suyodValueDown ? "bg-green-500" : "bg-red-500"} ${suyodValueUp ? "opacity-50" : ""}`}
-							>
+					<View className="flex-row items-center justify-center gap-4">
+						<TouchableOpacity onPressIn={setLeftIn} onPressOut={setLeftOut}>
+							<View className="p-4 bg-[#1a5f3a] rounded-full">
 								<Image
-									source={icons.Down}
-									resizeMode="contain"
+									source={icons.Left}
+									alt="Left"
+									className="w-10 h-10"
 									tintColor={"#fff"}
-									className="w-8 h-8"
 								/>
-							</Pressable>
-							<Pressable
-								disabled={suyodValueDown}
-								onPress={setSuyodUp}
-								className={` p-4 rounded-full ${suyodValueUp ? "bg-green-500" : "bg-red-500"} ${suyodValueDown ? "opacity-50" : ""}`}
-							>
-								<Image
-									source={icons.Up}
-									resizeMode="contain"
-									tintColor={"#fff"}
-									className="w-8 h-8"
-								/>
-							</Pressable>
-						</View>
-						<View className="flex-row items-center justify-center gap-4">
-							<TouchableOpacity onPressIn={setLeftIn} onPressOut={setLeftOut}>
-								<View className="p-4 bg-[#1a5f3a] rounded-full">
-									<Image
-										source={icons.Left}
-										alt="Left"
-										className="w-10 h-10"
-										tintColor={"#fff"}
-									/>
-								</View>
-							</TouchableOpacity>
-							<TouchableOpacity onPressIn={setRightIn} onPressOut={setRightOut}>
-								<View className="p-4 bg-[#1a5f3a] rounded-full">
-									<Image
-										source={icons.Right}
-										alt="Right"
-										className="w-10 h-10"
-										tintColor={"#fff"}
-									/>
-								</View>
-							</TouchableOpacity>
-						</View>
-					</View>
-
-					<View>
-						<TouchableOpacity
-							onPress={setPowerOn}
-							className={` rounded-full p-2 ${isPowerOn ? "bg-green-500" : "bg-red-500"}`}
-						>
-							<AntDesign name="poweroff" size={40} color="white" />
+							</View>
 						</TouchableOpacity>
+						<TouchableOpacity onPressIn={setRightIn} onPressOut={setRightOut}>
+							<View className="p-4 bg-[#1a5f3a] rounded-full">
+								<Image
+									source={icons.Right}
+									alt="Right"
+									className="w-10 h-10"
+									tintColor={"#fff"}
+								/>
+							</View>
+						</TouchableOpacity>
+					</View>
+					<View className="flex-row items-center justify-center gap-4">
+						<Pressable
+							disabled={suyodValueUp}
+							onPress={setSuyodDown}
+							className={` p-4 rounded-full ${suyodValueDown ? "bg-green-500" : "bg-red-500"} ${suyodValueUp ? "opacity-50" : ""}`}
+						>
+							<Image
+								source={icons.Down}
+								resizeMode="contain"
+								tintColor={"#fff"}
+								className="w-8 h-8"
+							/>
+						</Pressable>
+						<Pressable
+							disabled={suyodValueDown}
+							onPress={setSuyodUp}
+							className={` p-4 rounded-full ${suyodValueUp ? "bg-green-500" : "bg-red-500"} ${suyodValueDown ? "opacity-50" : ""}`}
+						>
+							<Image
+								source={icons.Up}
+								resizeMode="contain"
+								tintColor={"#fff"}
+								className="w-8 h-8"
+							/>
+						</Pressable>
 					</View>
 					<Trootle
 						power={power}
