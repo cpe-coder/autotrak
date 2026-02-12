@@ -201,7 +201,7 @@ export default function Control() {
 				<View className="h-screen w-screen border">
 					<WebView
 						className="w-screen h-screen"
-						source={{ uri: "http://192.168.43.55:81/stream" }}
+						source={{ uri: "http://10.58.159.34:81/stream" }}
 					/>
 				</View>
 				<View className="flex-row justify-between items-end py-10 px-20 absolute z-10 w-full bottom-0">
